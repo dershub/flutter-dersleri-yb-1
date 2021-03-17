@@ -9,7 +9,7 @@ asenkronIslem1() async {
 }
 
 asenkronIslem2() async {
-  await Future.delayed(Duration(seconds: 2));
+  await Future.delayed(Duration(seconds: 5));
   print("Merhaba Dünya 2");
 }
 
@@ -25,7 +25,7 @@ asenkronIslem5() async {
   print("Merhaba Dünya 5");
 }
 
-Future<String> senkronIslem() async {
+Future<String> asenkronIslem() async {
   for (List sayilar = [];
       sayilar.length < 10;
       sayilar.add(Random().nextInt(100))) {
@@ -40,7 +40,7 @@ Future<String> senkronIslem() async {
   asenkronIslem4();
   asenkronIslem5();
 
-  return "Başarıyla tamamlandım";
+  throw "Başarıyla tamamlanamadım";
 }
 
 // Iterable => adim adim işlenebilen
@@ -58,7 +58,7 @@ Iterable<int> eyeKadarDogalSayilar(int e) sync* {
   }
 }
 
-List urleler = [
+List<String> urleler = [
   "url1",
   "url2",
   "url3",
@@ -72,6 +72,20 @@ Stream<int> rastgeleSuredeElemanOlustur(int e) async* {
     int gi = await Future.value(r.nextInt(e));
     yield gi;
   }
+}
+
+// build fonksiyonu anonim olmak zorunda değil
+Widget buildIslemi(_, AsyncSnapshot asenkronIslemTakibcisi) {
+  // özellikle geriye değer döndürmeyen işlemlerin tamamlandığını takip etmek için kullanın
+  /* if (asenkronIslemTakibcisi.connectionState ==
+                  ConnectionState.done) return Text("İşlem tamamlandı"); */
+
+  if (asenkronIslemTakibcisi.hasData)
+    return Text("Asenkron işlem veri oluştur ${asenkronIslemTakibcisi.data}");
+  else if (asenkronIslemTakibcisi.hasError)
+    return Text("Asenkron işlem hata oluştu ${asenkronIslemTakibcisi.error}");
+  else
+    return CircularProgressIndicator();
 }
 
 class AsenkronDers extends StatelessWidget {
@@ -92,7 +106,7 @@ class AsenkronDers extends StatelessWidget {
     print(yediyeKadarDS);
     print(eyeKadarDogalSayilar(17).toSet());
 
-    senkronIslem()
+    asenkronIslem()
         .then((deger) => print(deger))
         .catchError((hata) => print(hata))
         .whenComplete(
@@ -102,6 +116,15 @@ class AsenkronDers extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Asenkron Ders"),
+      ),
+      body: Column(
+        children: [
+          FutureBuilder<String>(
+            future: asenkronIslem(),
+            initialData: "Ben başlangıç verisiyim",
+            builder: buildIslemi,
+          ),
+        ],
       ),
     );
   }

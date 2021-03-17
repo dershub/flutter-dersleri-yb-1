@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'sayfalar/asenkron_ders.dart';
 import 'sayfalar/ikinci_sayfa.dart';
 
+// liste metotları medium linki: https://hubders.medium.com/kullan%C4%B1%C5%9Fl%C4%B1-liste-metodlar%C4%B1-d0ecf2860619
 // diagram linki: https://drive.google.com/file/d/1Z15ihJB2wVkHeGdvWfR8I94wDOM6MgZa/view?usp=sharing
 // ödev https://dart.dev/samples buradaki örnekleri kendi örneklerinizle değiştirerek tekrardan yazın
 
