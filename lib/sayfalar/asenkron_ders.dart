@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ Future<String> asenkronIslem() async {
   asenkronIslem4();
   asenkronIslem5();
 
-  throw "Başarıyla tamamlanamadım";
+  return "Başarıyla tamamlandım";
 }
 
 // Iterable => adim adim işlenebilen
@@ -65,11 +66,14 @@ List<String> urleler = [
   "url4",
 ];
 
+List _sayilar = [];
+
 Stream<int> rastgeleSuredeElemanOlustur(int e) async* {
   for (int i = 0; i <= e; i++) {
     Random r = Random();
     await Future.delayed(Duration(seconds: r.nextInt(e)));
     int gi = await Future.value(r.nextInt(e));
+    _sayilar.add(gi);
     yield gi;
   }
 }
@@ -123,6 +127,16 @@ class AsenkronDers extends StatelessWidget {
             future: asenkronIslem(),
             initialData: "Ben başlangıç verisiyim",
             builder: buildIslemi,
+          ),
+          StreamBuilder(
+            stream: rastgeleSuredeElemanOlustur(15),
+            builder: (_, AsyncSnapshot streamTakip) {
+              return Column(
+                children: [
+                  for (int streamEleman in _sayilar) Text("$streamEleman"),
+                ],
+              );
+            },
           ),
         ],
       ),
